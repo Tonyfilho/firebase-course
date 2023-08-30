@@ -7,6 +7,7 @@ import {LoginComponent} from './login/login.component';
 import {CreateCourseComponent} from './create-course/create-course.component';
 import {AngularFireAuthGuard, hasCustomClaim, redirectUnauthorizedTo} from '@angular/fire/auth-guard';
 import {CreateUserComponent} from './create-user/create-user.component';
+import { AboutSnapShotComponent } from './about-with-snapshot-changes/about-with-snapshot-changes.component';
 
 const routes: Routes = [
   {
@@ -26,6 +27,10 @@ const routes: Routes = [
   {
     path: 'about',
     component: AboutComponent
+  },
+  {
+    path: 'about-with-snapshot-changes',
+    component: AboutSnapShotComponent
   },
   {
     path: 'login',

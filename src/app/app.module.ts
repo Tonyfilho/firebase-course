@@ -44,6 +44,7 @@ import {MatNativeDateModule} from '@angular/material/core';
     AppComponent,
     HomeComponent,
     AboutComponent,
+    
     CourseComponent,
     CoursesCardListComponent,
     EditCourseDialogComponent,
