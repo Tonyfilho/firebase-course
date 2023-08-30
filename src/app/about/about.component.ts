@@ -58,19 +58,21 @@ export class AboutComponent {
             //  console.log("snap.docs: ", snap.docs); //List of DOCS
 
             snap.forEach(snap => {
-              //  console.log("FOREACH => snap.id: ", snap.id);
-               // console.log("FOREACH => snap.data(): ", snap.data());
+                //  console.log("FOREACH => snap.id: ", snap.id);
+                // console.log("FOREACH => snap.data(): ", snap.data());
             }); //List of DOCS
 
         })
         this.ReadOneLessonCollection();
         this.ReadOneLessonCollectionWhere();
+      //  this.ReadErroQuery2targetInSameField();
+        this.ReadErroQuery2targetInDifferenteField();
     }
     ReadOneLessonCollection() {
         this.db.collection('/courses/08iaoDSzIvve0fACKMNn/lessons').get().subscribe(snap => {
             snap.forEach(snap => {
-               // console.log("FOREACH LESSON COLLECTION => snap.id: ", snap.id);
-              //  console.log("FOREACH LESSON COLLECTION => snap.data(): ", snap.data());
+                // console.log("FOREACH LESSON COLLECTION => snap.id: ", snap.id);
+                //  console.log("FOREACH LESSON COLLECTION => snap.data(): ", snap.data());
             }); //List of DOCS
 
         })
@@ -80,8 +82,34 @@ export class AboutComponent {
         this.db.collection('/courses/08iaoDSzIvve0fACKMNn/lessons', ref => ref.where('seqNo', "<=", 5).orderBy('seqNo')).get().subscribe(snap => {
 
             snap.forEach(snap => {
-                console.log("FOREACH LESSON COLLECTION WHERE SEQNO <= 5 snap.id: ", snap.id);
-                console.log("FOREACH LESSON COLLECTION WHERE SEQNO <= 5  snap.data(): ", snap.data());
+                //  console.log("FOREACH LESSON COLLECTION WHERE SEQNO <= 5 snap.id: ", snap.id);
+                //  console.log("FOREACH LESSON COLLECTION WHERE SEQNO <= 5  snap.data(): ", snap.data());
+            }); //List of DOCS
+
+        })
+    }
+    /******2 Target in the same FIELD: Query ERROR  will show off a error, because we have a QUERY has 2 targets  in same FIELDS instead of ONE in the same Collection, is unlike the SQL */
+    /**ERROR FirebaseError: Invalid query. All where filters with an inequality (<, <=, !=, not-in, >, or >=) must be on the same field. But you have inequality filters on 'seqNo' and 'lessonsCount' */
+    ReadErroQuery2targetInSameField() {
+        this.db.collection('/courses/08iaoDSzIvve0fACKMNn/lessons', ref => ref.where('seqNo', "<=", 5).where('lessonsCount', "<=", 10).orderBy('seqNo')).get().subscribe(snap => {
+
+            snap.forEach(snap => {
+              //  console.log("FOREACH LESSON COLLECTION WHERE SEQNO <= 5 snap.id: ", snap.id);
+              //  console.log("FOREACH LESSON COLLECTION WHERE SEQNO <= 5  snap.data(): ", snap.data());
+            }); //List of DOCS
+
+        })
+    }
+    /******2 Target in the DIFFERENT FIELD: Query ERROR  will show off a error, You need to create a manual INDEX to this QUERY */
+    ReadErroQuery2targetInDifferenteField() {
+        this.db.collection('courses', ref => ref.where('seqNo', "<=", 20)
+        .where("url", "==", "angular-forms-course")
+        .orderBy('seqNo')
+        ).get()
+        .subscribe(snap => {
+            snap.forEach(snap => {
+                console.log("MUST  CREATE A MANUAL INDEX: ", snap.id);
+                console.log("MUST  CREATE A MANUAL INDEX ", snap.data());
             }); //List of DOCS
 
         })
