@@ -1,10 +1,11 @@
-import {Component, OnInit} from '@angular/core';
+import { Observable } from 'rxjs';
+import { Component, OnInit } from '@angular/core';
 
 
 import 'firebase/firestore';
 
-import {AngularFirestore} from '@angular/fire/firestore';
-import {COURSES, findLessonsForCourse} from './db-data';
+import { AngularFirestore } from '@angular/fire/firestore';
+import { COURSES, findLessonsForCourse } from './db-data';
 
 
 @Component({
@@ -35,9 +36,34 @@ export class AboutComponent {
     }
 
     removeId(data: any) {
-        const newData: any = {...data};
+        const newData: any = { ...data };
         delete newData.id;
         return newData;
+    }
+
+
+    /**Doc Method is used to read a SIGLE Doc in data Base, GET is Obervable just emit ONLY ONE VALUE */
+    onReadDoc() {
+        this.db.doc('/courses/08iaoDSzIvve0fACKMNn').get().subscribe(snap => {
+            console.log("snap.id: ", snap.id);
+            console.log("snap.data(): ", snap.data());
+        });
+    }
+
+
+    /**Collection Method is Method to get one Colletion is Obervable just emit ONLY ONE VALUE */
+    ReadCollections() {
+        this.db.collection('courses').get().subscribe(snap => {
+            console.log("snap.query: ", snap.query); 
+
+            console.log("snap.docs: ", snap.docs); //List of DOCS
+
+            console.log("snap.docs: ", snap.forEach(snap => {
+                console.log("FOREACH => snap.id: ", snap.id);
+                console.log("FOREACH => snap.data(): ", snap.data());
+            })); //List of DOCS
+
+        })
     }
 
 
