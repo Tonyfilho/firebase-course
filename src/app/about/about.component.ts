@@ -65,7 +65,7 @@ export class AboutComponent {
         })
         this.ReadOneLessonCollection();
         this.ReadOneLessonCollectionWhere();
-      //  this.ReadErroQuery2targetInSameField();
+        //  this.ReadErroQuery2targetInSameField();
         this.ReadErroQuery2targetInDifferenteField();
     }
     ReadOneLessonCollection() {
@@ -94,8 +94,8 @@ export class AboutComponent {
         this.db.collection('/courses/08iaoDSzIvve0fACKMNn/lessons', ref => ref.where('seqNo', "<=", 5).where('lessonsCount', "<=", 10).orderBy('seqNo')).get().subscribe(snap => {
 
             snap.forEach(snap => {
-              //  console.log("FOREACH LESSON COLLECTION WHERE SEQNO <= 5 snap.id: ", snap.id);
-              //  console.log("FOREACH LESSON COLLECTION WHERE SEQNO <= 5  snap.data(): ", snap.data());
+                //  console.log("FOREACH LESSON COLLECTION WHERE SEQNO <= 5 snap.id: ", snap.id);
+                //  console.log("FOREACH LESSON COLLECTION WHERE SEQNO <= 5  snap.data(): ", snap.data());
             }); //List of DOCS
 
         })
@@ -103,19 +103,35 @@ export class AboutComponent {
     /******2 Target in the DIFFERENT FIELD: Query ERROR  will show off a error, You need to create a manual INDEX to this QUERY */
     ReadErroQuery2targetInDifferenteField() {
         this.db.collection('courses', ref => ref.where('seqNo', "<=", 20)
-        .where("url", "==", "angular-forms-course")
-        .orderBy('seqNo')
+            .where("url", "==", "angular-forms-course")
+            .orderBy('seqNo')
         ).get()
-        .subscribe(snap => {
-            snap.forEach(snap => {
-                console.log("MUST  CREATE A MANUAL INDEX: ", snap.id);
-                console.log("MUST  CREATE A MANUAL INDEX ", snap.data());
-            }); //List of DOCS
+            .subscribe(snap => {
+                snap.forEach(snap => {
+                   // console.log("MUST  CREATE A MANUAL INDEX: ", snap.id);
+                  //  console.log("MUST  CREATE A MANUAL INDEX ", snap.data());
+                }); //List of DOCS
 
-        })
+            })
     }
 
+    /******************COLLECTION GROUP***************************** */
 
+    /**We have a Collection called (COURSES) and into this Collection we have OTHER Collection called (LESSONS)  */
+    /**We will create a QUERY to GET all the nested collection, in other words Get all the Collection NESTED */
+    /**CollectionGroup('NomeOfNestedCollection) will get all the collection independently of WHERE thet are Situated */
+    /**We must to pass a querie REFERENCE. */
+    ReadCollectionsGroup() {
+
+        this.db.collectionGroup("lessons", ref => ref.where("seqNo", "==", 1))
+        .get().subscribe(snap => {
+            snap.forEach(snap => {
+                console.log("QUERY GROUP: ", snap.id);
+                console.log("QUERY GROUP: ", snap.data());
+            }); //List of DOCS
+
+        });
+     }
 }
 
 
