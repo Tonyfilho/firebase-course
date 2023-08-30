@@ -54,14 +54,35 @@ export class AboutComponent {
     /**Collection Method is Method to get one Colletion is Obervable just emit ONLY ONE VALUE */
     ReadCollections() {
         this.db.collection('courses').get().subscribe(snap => {
-            console.log("snap.query: ", snap.query); 
+            //  console.log("snap.query: ", snap.query);
+            //  console.log("snap.docs: ", snap.docs); //List of DOCS
 
-            console.log("snap.docs: ", snap.docs); //List of DOCS
+            snap.forEach(snap => {
+              //  console.log("FOREACH => snap.id: ", snap.id);
+               // console.log("FOREACH => snap.data(): ", snap.data());
+            }); //List of DOCS
 
-            console.log("snap.docs: ", snap.forEach(snap => {
-                console.log("FOREACH => snap.id: ", snap.id);
-                console.log("FOREACH => snap.data(): ", snap.data());
-            })); //List of DOCS
+        })
+        this.ReadOneLessonCollection();
+        this.ReadOneLessonCollectionWhere();
+    }
+    ReadOneLessonCollection() {
+        this.db.collection('/courses/08iaoDSzIvve0fACKMNn/lessons').get().subscribe(snap => {
+            snap.forEach(snap => {
+               // console.log("FOREACH LESSON COLLECTION => snap.id: ", snap.id);
+              //  console.log("FOREACH LESSON COLLECTION => snap.data(): ", snap.data());
+            }); //List of DOCS
+
+        })
+    }
+    /**We put a condition here WHERE */
+    ReadOneLessonCollectionWhere() {
+        this.db.collection('/courses/08iaoDSzIvve0fACKMNn/lessons', ref => ref.where('seqNo', "<=", 5).orderBy('seqNo')).get().subscribe(snap => {
+
+            snap.forEach(snap => {
+                console.log("FOREACH LESSON COLLECTION WHERE SEQNO <= 5 snap.id: ", snap.id);
+                console.log("FOREACH LESSON COLLECTION WHERE SEQNO <= 5  snap.data(): ", snap.data());
+            }); //List of DOCS
 
         })
     }
