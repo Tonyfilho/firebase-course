@@ -8,6 +8,7 @@ import {CreateCourseComponent} from './create-course/create-course.component';
 import {AngularFireAuthGuard, hasCustomClaim, redirectUnauthorizedTo} from '@angular/fire/auth-guard';
 import {CreateUserComponent} from './create-user/create-user.component';
 import { AboutSnapShotComponent } from './about-with-snapshot-changes/about-with-snapshot-changes.component';
+import { AboutWithValueChangesComponent } from './about-with-value-changes/about-with-value-changes.component';
 
 const routes: Routes = [
   {
@@ -31,6 +32,10 @@ const routes: Routes = [
   {
     path: 'about-with-snapshot-changes',
     component: AboutSnapShotComponent
+  },
+  {
+    path: 'about-with-values-changes',
+    component: AboutWithValueChangesComponent
   },
   {
     path: 'login',

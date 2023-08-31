@@ -39,8 +39,10 @@ export class AboutComponent {
         const newData: any = { ...data };
         delete newData.id;
         return newData;
+
     }
- /**Doc Method is used to read a SIGLE Doc in data Base, GET is Obervable just emit ONLY ONE VALUE */
+    /**   We got some methods called the shot lived  Observables or NO REAL TIME UPDATE, this kind Observable will completes immediately after that the stream will finish. */
+    /**Doc Method is used to read a SIGLE Doc in data Base, GET is Obervable just emit ONLY ONE VALUE */
 
     /**Doc Method is used to read a SIGLE Doc in data Base, GET is Obervable just emit ONLY ONE VALUE */
     onReadDoc() {
@@ -108,8 +110,8 @@ export class AboutComponent {
         ).get()
             .subscribe(snap => {
                 snap.forEach(snap => {
-                   // console.log("MUST  CREATE A MANUAL INDEX: ", snap.id);
-                  //  console.log("MUST  CREATE A MANUAL INDEX ", snap.data());
+                    // console.log("MUST  CREATE A MANUAL INDEX: ", snap.id);
+                    //  console.log("MUST  CREATE A MANUAL INDEX ", snap.data());
                 }); //List of DOCS
 
             })
@@ -124,14 +126,14 @@ export class AboutComponent {
     ReadCollectionsGroup() {
 
         this.db.collectionGroup("lessons", ref => ref.where("seqNo", "==", 1))
-        .get().subscribe(snap => {
-            snap.forEach(snap => {
-                console.log("QUERY GROUP: ", snap.id);
-                console.log("QUERY GROUP: ", snap.data());
-            }); //List of DOCS
+            .get().subscribe(snap => {
+                snap.forEach(snap => {
+                    console.log("QUERY GROUP: ", snap.id);
+                    console.log("QUERY GROUP: ", snap.data());
+                }); //List of DOCS
 
-        });
-     }
+            });
+    }
 }
 
 

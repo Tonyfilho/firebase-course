@@ -27,7 +27,7 @@ export class AboutSnapShotComponent {
 
     /**
      * **************NOTE:******************************************
-     * *We got some methods called the Long lived  Observables or REAL TIME UPDATE, this kind Observable will trigger update without you hit the button or do any update in your application. 
+     * *We got some methods called  Observable<Action<DocumentSnapshot<unknown>>> or REAL TIME UPDATE, this kind Observable will trigger update without you hit the button or do any update in your application. 
      * Ex: A stock of the goods and you have 5 sellers selling  this goods in the same time.
      */
 
@@ -69,11 +69,11 @@ export class AboutSnapShotComponent {
 
     /**We put a condition here WHERE */
     ReadOneLessonCollectionWhere() {
-        this.db.collection('/courses/08iaoDSzIvve0fACKMNn/lessons', ref => ref.where('seqNo', "<=", 5).orderBy('seqNo')).get().subscribe(snap => {
+        this.db.collection('/courses/08iaoDSzIvve0fACKMNn/lessons', ref => ref.where('seqNo', "<=", 5).orderBy('seqNo')).snapshotChanges().subscribe(snap => {
 
             snap.forEach(snap => {
-                //  console.log("FOREACH LESSON COLLECTION WHERE SEQNO <= 5 snap.id: ", snap.id);
-                //  console.log("FOREACH LESSON COLLECTION WHERE SEQNO <= 5  snap.data(): ", snap.data());
+                // console.log("FOREACH LESSON COLLECTION => snap.payload.doc.id: ", snap.payload.doc.id);
+                //  console.log("FOREACH LESSON COLLECTION => snap.payload.doc.data(): ", snap.payload.doc.data());
             }); //List of DOCS
 
         })
