@@ -38,13 +38,14 @@ import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import {CreateUserComponent} from './create-user/create-user.component';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {MatNativeDateModule} from '@angular/material/core';
+import { AboutSnapShotComponent } from './about-with-snapshot-changes/about-with-snapshot-changes.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
     AboutComponent,
-    
+    AboutSnapShotComponent,
     CourseComponent,
     CoursesCardListComponent,
     EditCourseDialogComponent,

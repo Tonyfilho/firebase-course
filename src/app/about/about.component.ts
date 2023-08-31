@@ -40,7 +40,7 @@ export class AboutComponent {
         delete newData.id;
         return newData;
     }
-
+ /**Doc Method is used to read a SIGLE Doc in data Base, GET is Obervable just emit ONLY ONE VALUE */
 
     /**Doc Method is used to read a SIGLE Doc in data Base, GET is Obervable just emit ONLY ONE VALUE */
     onReadDoc() {
