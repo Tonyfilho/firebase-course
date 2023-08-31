@@ -5,9 +5,6 @@
 export const environment = {
   production: false,
   firebase: {
-
-
-
     apiKey: "AIzaSyAQGE4krCEpWrWTpxhDnE_L51D4XgmdRj8",
     authDomain: "fir-couse-recording-78990.firebaseapp.com",
     projectId: "fir-couse-recording-78990",
