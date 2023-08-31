@@ -26,12 +26,14 @@ export class HomeComponent implements OnInit {
 
     ngOnInit() {
       this.realdCourses();
+    //  this.beginnersCourses$.subscribe(data => { console.log("Beginners: ", data)})
+    //  this.advancedCourses$.subscribe(data => { console.log("Advanced: ", data)})
     }
 
     /**Fetch Methods */
     realdCourses() {
       this.beginnersCourses$ = this.courseService.loadCoursesByCategory('BEGINNER');
-      this.beginnersCourses$ = this.courseService.loadCoursesByCategory('ADVANCED');
+      this.advancedCourses$ = this.courseService.loadCoursesByCategory2('ADVANCED');
     }
 
 }
