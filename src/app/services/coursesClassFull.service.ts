@@ -9,7 +9,7 @@ import { convertSnap } from './db-converter-types-util';
 @Injectable({
   providedIn: 'root'
 })
-export class CoursesService {
+export class CoursesClassFullService {
 
   constructor(private db: AngularFirestore) { };
 
@@ -28,7 +28,22 @@ export class CoursesService {
    return  this.db.collection('courses', ref => ref.where("categories", "array-contains", category)).get().pipe(map(result => convertSnap<Course>(result)));    
   }
 
-
+  /*****************************************Or without TypeSave******************** */
+  loadCoursesByCategory2(category: string): Observable<Course[]> {    
+   return  this.db.collection('courses', ref => ref.where("categories", "array-contains", category)).get().pipe(map(result => {
+     return result.docs.map((snap)=> {      
+       return { id: snap.id,  ...<any>snap.data()}; //OR this bellow way */
+      })
+    }));    
+  }
+  /*****************************************Or without TypeSave******************** */
+  loadCoursesByCategory3(category: string): Observable<Course[]> {    
+   return  this.db.collection('courses', ref => ref.where("categories", "array-contains", category)).get().pipe(map(result => {
+     return result.docs.map((snap: any)=> {      
+       return { id: snap.id,  ...snap.data()}; //OR this bellow way */
+      })
+    }));    
+  }
 
  /**************************Save Course */
  createCourse(newCourse: Partial<Course>, courseId?: string):Observable<Partial<Course>> {

@@ -5,6 +5,8 @@ import {catchError, map} from 'rxjs/operators';
 import {AngularFirestore} from '@angular/fire/firestore';
 import {Router} from '@angular/router';
 import { CoursesService } from '../services/courses.service';
+import { CoursesClassFullService } from '../services/coursesClassFull.service';
+
 
 
 @Component({
@@ -20,7 +22,7 @@ export class HomeComponent implements OnInit {
     advancedCourses$: Observable<Course[]>;
 
     constructor(
-      private router: Router, private courseService: CoursesService) {
+      private router: Router, private courseService: CoursesService, private courseService2: CoursesClassFullService) {
 
     }
 
@@ -33,7 +35,7 @@ export class HomeComponent implements OnInit {
     /**Fetch Methods */
     realdCourses() {
       this.beginnersCourses$ = this.courseService.loadCoursesByCategory('BEGINNER');
-      this.advancedCourses$ = this.courseService.loadCoursesByCategory2('ADVANCED');
+      this.advancedCourses$ = this.courseService2.loadCoursesByCategory2('ADVANCED');
     }
 
 }
