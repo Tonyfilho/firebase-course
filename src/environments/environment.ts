@@ -4,6 +4,9 @@
 
 export const environment = {
   production: false,
+  /**Active Emulator */
+  useEmulators: true,
+  /**Real Cloud Database, but Emulator must have with Flag: FALSE */
   firebase: {
     apiKey: "AIzaSyAQGE4krCEpWrWTpxhDnE_L51D4XgmdRj8",
     authDomain: "fir-couse-recording-78990.firebaseapp.com",
