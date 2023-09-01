@@ -1,3 +1,4 @@
+
 {
   "name": "angularfire-course",
   "version": "0.0.0",
@@ -8,8 +9,9 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
+    "localdev": "firebase emulators:start --only firestore --import test-data",
+    "tony": "ng s -o",
     "firebase": "firebase",
-    "local-dev": "firebase emulators:start --only firestore,auth,functions --import test-data",
     "empty-emulator": "firebase emulators:start",
     "emulator": "firebase emulators:start --import test-data",
     "export": "firebase emulators:export test-data"
