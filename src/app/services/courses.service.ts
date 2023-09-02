@@ -31,6 +31,19 @@ export class CoursesService {
 
 
  /**************************Save Course */
+ /**
+  * 
+  * @param newCourse 
+  * @param courseId 
+  * @returns new Course
+  * We have property call (seqNo), that property is responsable ordered entity, all the entity has a seguential number 1,2,3,4... 
+  * Note: We want make sure the whenever we insert a new course entity in our database, that we are going to be polulating the sequential number3
+  * with the next sequential number available.
+  */
+ /**
+  * 1º  We need to do is it First query the COURSES collection and get Course with the highest sequential
+  * We are going to access here our Angular Firestores service and we going to acess the courses collection
+  */
  createCourse(newCourse: Partial<Course>, courseId?: string):Observable<Partial<Course>> {
 
   return;

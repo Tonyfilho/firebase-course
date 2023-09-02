@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Course } from '../model/course';
-import { catchError, concatMap, last, map, take, tap,  } from 'rxjs/operators';
+import { catchError, concatMap, last, map, take, tap, } from 'rxjs/operators';
 import { from, Observable, throwError, pipe } from 'rxjs';
 import { Router } from '@angular/router';
 import { AngularFireStorage } from '@angular/fire/storage';
@@ -21,7 +21,7 @@ export class CreateCourseComponent implements OnInit {
   courseId: string;
   form: FormGroup = this.fb.group({
     description: ['', Validators.required],
-    category: ["BEGINNER", Validators.required], //BEGINNER  is a start value of form field
+    categories: ["BEGINNER", Validators.required], //BEGINNER  is a start value of form field
     url: ["", Validators.required],
     longDescription: ['', Validators.required],
     promo: [false], //False is a start value of the field
@@ -38,11 +38,14 @@ export class CreateCourseComponent implements OnInit {
 
 
 
+  /***Very nice the way to spread the form */
   onCreateCourse() {
-    /***Very nice the way to spread the form */
     const newCourse: Course = { ...this.form.value } as Course;
     /**We need to convert type: Date  to  the type: TIMESTEMP represent the moment time in Firestore database */
     newCourse.promoStartAt = Timestamp.fromDate(this.form.value.promoStartAt);
+    /**We need to fix, because Categories is a Array and not a Object */
+    newCourse.categories = [this.form.value.categories];
+    console.log("newCourse: ", newCourse);
 
     this.courseService.createCourse(newCourse, this.courseId)
       .pipe(
