@@ -5,7 +5,7 @@ import {catchError, map} from 'rxjs/operators';
 import {AngularFirestore} from '@angular/fire/firestore';
 import {Router} from '@angular/router';
 import { CoursesService } from '../services/courses.service';
-import { CoursesClassFullService } from '../services/coursesClassFull.service';
+import { CoursesClassFullService } from '../services/coursesClassFullDummy.service';
 
 
 
@@ -27,13 +27,13 @@ export class HomeComponent implements OnInit {
     }
 
     ngOnInit() {
-      this.realdCourses();
+      this.reloadCourses();
     //  this.beginnersCourses$.subscribe(data => { console.log("Beginners: ", data)})
     //  this.advancedCourses$.subscribe(data => { console.log("Advanced: ", data)})
     }
 
     /**Fetch Methods */
-    realdCourses() {
+    reloadCourses() {
       this.beginnersCourses$ = this.courseService.loadCoursesByCategory('BEGINNER');
       this.advancedCourses$ = this.courseService2.loadCoursesByCategory2('ADVANCED');
     }

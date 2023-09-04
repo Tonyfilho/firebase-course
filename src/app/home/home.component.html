@@ -14,11 +14,12 @@
     <mat-tab-group>
 
         <mat-tab label="Beginners" >
-           <courses-card-list [courses]="this.beginnersCourses$ | async"></courses-card-list>
+            <!-- Update the courser By @OutPut() courseEdited from  -->
+           <courses-card-list [courses]="this.beginnersCourses$ | async" (courseEdited)="reloadCourses()"></courses-card-list>
         </mat-tab>
         
         <mat-tab label="Advanced">
-            <courses-card-list [courses]="this.advancedCourses$ | async"></courses-card-list>
+            <courses-card-list [courses]="this.advancedCourses$ | async" (courseEdited)="reloadCourses()"></courses-card-list>
 
         </mat-tab>
 

@@ -13,25 +13,39 @@ export class CoursesService {
 
   constructor(private db: AngularFirestore) { };
 
-
-  /**Do the queries using the SPECIAL target (array contains), this type must put into que condition Query */
-  /**This is a SPECIAL target content */
-  /**In into the query we need:
-   * 1º Where  conditions,
-   * 2º OrdeBy to ordem 
-   * 3º need to return a Array, you must find a way
-   * 4º convert data Useing MAP Rxjs and Map of Js.Arrays
-   * 5º We must return a Array, you must to convert Observable<QuerySnapshot<unknown>> to our domain model
-   */
-
-  loadCoursesByCategory(category: string): Observable<Course[]> {
-    return this.db.collection('courses', ref => ref.where("categories", "array-contains", category)).get().pipe(map(result => convertSnap<Course>(result)));
+  /*****UPDATE****
+   * Will are going to have a Partial<Course> and not a full Course, because we wont update de ID */
+  /**Note: The returno of Obervabble is only used to test if the Operation was SECCESSFUL of NOT */
+  updataCourse(courseID: string, courseChanged: Partial<Course>): Observable<any> {
+   return from (this.db.doc(`courses/${courseID}`).update(courseChanged));
   }
 
 
 
-  /**************************Save Course */
-  /**
+
+
+
+
+
+  
+  /******SAVEALL****
+   * Do the queries using the SPECIAL target (array contains), this type must put into que condition Query */
+  loadCoursesByCategory(category: string): Observable<Course[]> {
+    /**1º Create a Colection and pass the path.*/
+    return this.db.collection('courses', ref =>
+      /**2º Create a Function Reference and into the ref. pass condition Where(Name of properties("categories"), and Kind of Data("array-contains"), and Data(category)); */
+      ref.where("categories", "array-contains", category))
+      /**3º We are going to use GET() Method  that will create a Observable*/
+      .get()
+      .pipe(
+        /**4º After save we are convert 1 object to Array of Couser to create our Response of Course[] */
+        map(result => convertSnap<Course>(result)));
+  }
+
+
+
+
+  /*******SaveOne****
    * 
    * @param newCourse 
    * @param courseId 
@@ -40,46 +54,24 @@ export class CoursesService {
    * Note: We want make sure the whenever we insert a new course entity in our database, that we are going to be polulating the sequential number3
    * with the next sequential number available.
    */
-  /**
-   * 1º  We need to do is it First QUERY FUNCTION the COURSES collection and get Course with the highest sequential
-   * We are going to access here our Angular Firestores service and we going to acess the courses collection
-   * 2º We going to take our query reference and we going to order our results by sequential number (seqNO).
-   * and DESCEND ORDER and we going to LIMITE the Result, this is our query function.
-   * 3º use the GET() Observable  only going to emit 1 value, the current of Database and the complete.
-   * 4º after Get() we need to take this Observable and we are going to SWITCH to ANOTHER observable, dont change the ORIGINAL.
-   * 5º CONACTMAP() is ideal fo save Operations, it take this Results observable from  GET, and emits a value of TYPE Course
-   * and we are going to create here inside this block that is going to take care of inserting the course the database.
-   * Note: The Query this is going to get us an array of RESULTS.
-   * 6º We are need to extract from it the matching courses.
-   * 7º We  need to convert the Result, and we have a Courses[];
-   * 8º Get the last courses in our database.
-   * 9º Let´st extract from the array the sequenctial number of the last course INSERTED in data, start with 0, this is FIRST course insert in the database
-   * 10ª We need to protect to dont return UNDEFINE, lets protect with ELVIS Operator (?) and Default Value in case this is ZERO (??)0
-   * 11ª Prepare the data that we are about to insert on the database. Var Course.
-   * 12º Let,s get value from the form, and pass to var Course. using the SPREAD operator
-   * 13º Add a NewCourse the sequencial Number segNo.
-   * 14ª Now we have the data that we want to add to the database, we need to consider 2 SCENARIOS: IF has identifier CourseId if dont Have.
-   * In both case, we want to create a SAVE Observable that is going to take care of the invertion.
-   * 15º  we are going to create this observable in 2 diferentes ways, depending  on the availability of the course Identifier .
-   * 16º If Have (courseId) we going to use the DOC to add in database, because we add 1 more.and pass course/ + path `courses/${courseId}`
-   * use method SET() Method to insert, we MUST convert set data to  Observable with FROM, because SET return a Promise
-   * 17º IF has, We use Collection and method ADD() and create a 1ª collection in our database if did not have.
-   * 18º After save, lets get the Return here to emit a valid course Object the value that just inserted in the database
-   * and in the case here of when we add  a Collection we dont have a IDENTIFIER yet, lets apply the MAP and to take a RESPONSE we have received here from
-   * the database.
-   * 19ª Map to take a Response from the database, and return a New Object.
-   * 20 we are going to return Identifier if available, IF NOT we are going to retorn id from the RESPONSE res => res.id,
-   * 
-   *  
-   */
   createCourse(newCourse: Partial<Course>, courseId?: string): Observable<Partial<Course>> {
+    /**1º We are going to do the Query Collection */
+    /**2º We are going to create Reference and filter ref => ref.orderBy("seqNo", "desc").limit(1) and ordering by DESC*/
     return this.db.collection("courses", ref => ref.orderBy("seqNo", "desc").limit(1))
+      /**We are going to use GET. Get it is going 1 time and return a Observable */
       .get().pipe(
+        /**3º Get the stream with ConcatMap(), ConcatMap() will get the the value after the Observable was complete */
+        /* console.log("Our RESULT ", result); */
         concatMap(result => {
-          console.log("Our RESULT ", result);
+          /** 4º After ConcatMap, we are going the Values e use the ConvertSnap() to receive Course[]*/
           const courses = convertSnap<Course>(result);
+          /** 5º We are going get values of our course sequence with property called seqNo */
           const lastCourseSeqNo = courses[0]?.seqNo ?? 0; //Default value
+          /**6º We are going to save NewCourse from the FORM, and Use Spread and increase the Sequence number + 1 */
           const course = { ...newCourse, seqNo: lastCourseSeqNo + 1 };
+          /**7º We are going to save the new Course, but we are need to know IF already has this course in database OR if it is new, if We are going
+           * a new ID from the FORM, the Course is NEW, orthewise the Course already exist.
+           */
           let save$: Observable<any>;
           if (courseId) {
             save$ = from(this.db.doc(`courses/${courseId}`).set(course));
@@ -87,11 +79,12 @@ export class CoursesService {
           else {
             save$ = from(this.db.collection("courses").add(course));
           }
-          /**Use Map to take the response from the database */
-          return save$.pipe(map(res =>  {
-            return { 
-                id: courseId ?? res.id,
-                ...course
+          /** 8º Now we are going to create a new RESPONSE to Using a  Map Operator after the return from the database */
+          return save$.pipe(map(res => {
+            /**9º Just to CHECK if we have ID, Using the operator BI ??, is alike a Ternary */
+            return {
+              id: courseId ?? res.id,
+              ...course
             }
           }));
         })
