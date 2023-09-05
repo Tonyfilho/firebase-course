@@ -1,5 +1,5 @@
 
 
-export interface UserRoles {
+export interface IUserRoles {
   admin:boolean;
 }

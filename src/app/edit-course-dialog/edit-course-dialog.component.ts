@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
-import { Course } from "../model/course";
+import { ICourse } from "../model/course";
 import { FormBuilder, Validators, FormGroup } from "@angular/forms";
 import { AngularFireStorage } from '@angular/fire/storage';
 import { Observable } from 'rxjs';
@@ -13,7 +13,7 @@ import { CoursesService } from '../services/courses.service';
     styleUrls: ['./edit-course-dialog.component.css']
 })
 export class EditCourseDialogComponent {
-    localCourse!: Course;
+    localCourse!: ICourse;
     formUpDate: FormGroup;
     /**Angular Material */
     /**
@@ -24,7 +24,7 @@ export class EditCourseDialogComponent {
      * 5º Save in the dataBase
      */
     constructor(private dialogRef: MatDialogRef<EditCourseDialogComponent>, private fb: FormBuilder,
-        @Inject(MAT_DIALOG_DATA) private course: Course, private courseService: CoursesService) {
+        @Inject(MAT_DIALOG_DATA) private course: ICourse, private courseService: CoursesService) {
         //  console.log("couser: ", course.description);
         this.localCourse = course;
         this.formUpDate = fb.group({

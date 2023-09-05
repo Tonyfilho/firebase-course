@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { Course } from '../model/course';
+import { ICourse } from '../model/course';
 import { catchError, concatMap, last, map, take, tap, } from 'rxjs/operators';
 import { from, Observable, throwError, pipe } from 'rxjs';
 import { Router } from '@angular/router';
@@ -40,7 +40,7 @@ export class CreateCourseComponent implements OnInit {
 
   /***Very nice the way to spread the form */
   onCreateCourse() {
-    const newCourse: Course = { ...this.form.value } as Course;
+    const newCourse: ICourse = { ...this.form.value } as ICourse;
     /**We need to convert type: Date  to  the type: TIMESTEMP represent the moment time in Firestore database */
     newCourse.promoStartAt = Timestamp.fromDate(this.form.value.promoStartAt);
     /**We need to fix, because Categories is a Array and not a Object */

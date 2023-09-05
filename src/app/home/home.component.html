@@ -14,12 +14,13 @@
     <mat-tab-group>
 
         <mat-tab label="Beginners" >
-            <!-- Update the courser By @OutPut() courseEdited from  -->
-           <courses-card-list [courses]="this.beginnersCourses$ | async" (courseEdited)="reloadCourses()"></courses-card-list>
+            <!-- Update the courser By @OutPut() courseEdited and @ courseDeleted from  CourseCardListComponent, will reLoad the page -->
+            <courses-card-list [courses]="this.beginnersCourses$ | async" (courseEdited)="reloadCourses()" (courseDeleted)="reloadCourses()"></courses-card-list>
         </mat-tab>
         
         <mat-tab label="Advanced">
-            <courses-card-list [courses]="this.advancedCourses$ | async" (courseEdited)="reloadCourses()"></courses-card-list>
+            <!-- Update the courser By @OutPut() courseEdited and @ courseDeleted from  CourseCardListComponent, will reLoad the page -->
+            <courses-card-list [courses]="this.advancedCourses$ | async" (courseEdited)="reloadCourses()" (courseDeleted)="reloadCourses()"></courses-card-list>
 
         </mat-tab>
 

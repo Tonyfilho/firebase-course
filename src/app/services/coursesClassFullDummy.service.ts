@@ -1,7 +1,7 @@
 import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 
-import { Course } from '../model/course';
+import { ICourse } from '../model/course';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { map } from 'rxjs/operators';
 import { convertSnap } from './db-converter-types-util';
@@ -24,12 +24,12 @@ export class CoursesClassFullService {
    * 5º We must return a Array, you must to convert Observable<QuerySnapshot<unknown>> to our domain model
    */
   
-  loadCoursesByCategory(category: string): Observable<Course[]> {
-   return  this.db.collection('courses', ref => ref.where("categories", "array-contains", category)).get().pipe(map(result => convertSnap<Course>(result)));    
+  loadCoursesByCategory(category: string): Observable<ICourse[]> {
+   return  this.db.collection('courses', ref => ref.where("categories", "array-contains", category)).get().pipe(map(result => convertSnap<ICourse>(result)));    
   }
 
   /*****************************************Or without TypeSave******************** */
-  loadCoursesByCategory2(category: string): Observable<Course[]> {    
+  loadCoursesByCategory2(category: string): Observable<ICourse[]> {    
    return  this.db.collection('courses', ref => ref.where("categories", "array-contains", category)).get().pipe(map(result => {
      return result.docs.map((snap)=> {      
        return { id: snap.id,  ...<any>snap.data()}; //OR this bellow way */
@@ -37,7 +37,7 @@ export class CoursesClassFullService {
     }));    
   }
   /*****************************************Or without TypeSave******************** */
-  loadCoursesByCategory3(category: string): Observable<Course[]> {    
+  loadCoursesByCategory3(category: string): Observable<ICourse[]> {    
    return  this.db.collection('courses', ref => ref.where("categories", "array-contains", category)).get().pipe(map(result => {
      return result.docs.map((snap: any)=> {      
        return { id: snap.id,  ...snap.data()}; //OR this bellow way */
@@ -46,7 +46,7 @@ export class CoursesClassFullService {
   }
 
  /**************************Save Course */
- createCourse(newCourse: Partial<Course>, courseId?: string):Observable<Partial<Course>> {
+ createCourse(newCourse: Partial<ICourse>, courseId?: string):Observable<Partial<ICourse>> {
 
   return;
  }

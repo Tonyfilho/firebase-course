@@ -1,7 +1,7 @@
 import { Observable, from } from 'rxjs';
 import { Injectable } from '@angular/core';
 
-import { Course } from '../model/course';
+import { ICourse } from '../model/course';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { map, concatMap } from 'rxjs/operators';
 import { convertSnap } from './db-converter-types-util';
@@ -13,24 +13,26 @@ export class CoursesService {
 
   constructor(private db: AngularFirestore) { };
 
-  /*****UPDATE****
-   * Will are going to have a Partial<Course> and not a full Course, because we wont update de ID */
-  /**Note: The returno of Obervabble is only used to test if the Operation was SECCESSFUL of NOT */
-  updataCourse(courseID: string, courseChanged: Partial<Course>): Observable<any> {
-   return from (this.db.doc(`courses/${courseID}`).update(courseChanged));
+  /*****Delete Top data Collection, without delete nested Collection data */
+  deleteCourse(courseID: string) {
+    return from(this.db.doc(`courses/${courseID}`).delete()) ;
   }
 
 
 
 
-
-
+  /*****UPDATE*****/
+   /* Will are going to have a Partial<Course> and not a full Course, because we wont update de ID */
+  /**Note: The returno of Obervabble is only used to test if the Operation was SECCESSFUL of NOT */
+  updataCourse(courseID: string, courseChanged: Partial<ICourse>): Observable<any> {
+   return from (this.db.doc(`courses/${courseID}`).update(courseChanged));
+  }
 
 
   
-  /******SAVEALL****
-   * Do the queries using the SPECIAL target (array contains), this type must put into que condition Query */
-  loadCoursesByCategory(category: string): Observable<Course[]> {
+  /******SAVEALL****/
+  /* Do the queries using the SPECIAL target (array contains), this type must put into que condition Query */
+  loadCoursesByCategory(category: string): Observable<ICourse[]> {
     /**1º Create a Colection and pass the path.*/
     return this.db.collection('courses', ref =>
       /**2º Create a Function Reference and into the ref. pass condition Where(Name of properties("categories"), and Kind of Data("array-contains"), and Data(category)); */
@@ -39,14 +41,14 @@ export class CoursesService {
       .get()
       .pipe(
         /**4º After save we are convert 1 object to Array of Couser to create our Response of Course[] */
-        map(result => convertSnap<Course>(result)));
+        map(result => convertSnap<ICourse>(result)));
   }
 
 
 
 
-  /*******SaveOne****
-   * 
+  /*******SaveOne****/
+  /* * 
    * @param newCourse 
    * @param courseId 
    * @returns new Course
@@ -54,7 +56,7 @@ export class CoursesService {
    * Note: We want make sure the whenever we insert a new course entity in our database, that we are going to be polulating the sequential number3
    * with the next sequential number available.
    */
-  createCourse(newCourse: Partial<Course>, courseId?: string): Observable<Partial<Course>> {
+  createCourse(newCourse: Partial<ICourse>, courseId?: string): Observable<Partial<ICourse>> {
     /**1º We are going to do the Query Collection */
     /**2º We are going to create Reference and filter ref => ref.orderBy("seqNo", "desc").limit(1) and ordering by DESC*/
     return this.db.collection("courses", ref => ref.orderBy("seqNo", "desc").limit(1))
@@ -64,7 +66,7 @@ export class CoursesService {
         /* console.log("Our RESULT ", result); */
         concatMap(result => {
           /** 4º After ConcatMap, we are going the Values e use the ConvertSnap() to receive Course[]*/
-          const courses = convertSnap<Course>(result);
+          const courses = convertSnap<ICourse>(result);
           /** 5º We are going get values of our course sequence with property called seqNo */
           const lastCourseSeqNo = courses[0]?.seqNo ?? 0; //Default value
           /**6º We are going to save NewCourse from the FORM, and Use Spread and increase the Sequence number + 1 */

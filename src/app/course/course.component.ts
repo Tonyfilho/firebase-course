@@ -1,9 +1,9 @@
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {Course} from '../model/course';
+import {ICourse} from '../model/course';
 import {finalize, tap} from 'rxjs/operators';
 import {Observable} from 'rxjs';
-import {Lesson} from '../model/lesson';
+import {ILesson} from '../model/lesson';
 
 
 @Component({
