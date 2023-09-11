@@ -5,6 +5,7 @@ import { ICourse } from '../model/course';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { map, concatMap } from 'rxjs/operators';
 import { convertSnap } from './db-converter-types-util';
+import { ILesson } from '../model/lesson';
 
 @Injectable({
   providedIn: 'root'
@@ -13,23 +14,60 @@ export class CoursesService {
 
   constructor(private db: AngularFirestore) { };
 
+  /*****Delete All the colection */
+  /******Undestand Firebase Transactional Batched Writes****  */
+  deleteCourseAndCollection(courseId: string) {
+    /**1º We going to to acess courses collection, and acess nested collection LESSONS   */
+    return this.db.collection(`courses/${courseId}/lessons`)
+      /**2º let call get() and receive a  Observable to retreive all */
+      .get()
+      /**3º Lest modification that request in Data Modification Request, remamber this a list, into the another List 
+       * Note: This is a READ Request , we are reading the Lessons From database.*/
+      .pipe(
+        /*4º Transform Read Transaction in Write Transaction, We going to delete from database every sigle lesson retrieved here from this query courses/${courseId}/lessons  * */
+        concatMap(results =>
+        /**5º We are using this because we want to turn an Observable into another observable, Into the ResultCourse contain several RESULTs  */ {
+          /**6º Get all the lessons results, and convert it in ILesson[]*/
+          const localLessons = convertSnap<ILesson>(results);
+          /**7º We going to loop through them one by one, delete each of the Lesson and the end the delete the course, We need to do this in One single Transaction  */
+          /**8º Name the Transaction in FireStare is call the Batched Write, We goig to create a new Batched Write */
+          const batched = this.db.firestore.batch();
+          /**Batched Write Operation is Atomic operation like SQL  Database transaction, this means that either all of operations of the batch are SUCCESSFULL executed in the database*/
+          /**OR all the alternatively, if something goes wrong, then NONE ALL the operations go through, jut like SQL */
+          /**9º We going to delete Course Document, for that We need Firestore Reference to Document, Let`s Grab the Ref, using Angular Firestore Service and pass the Path, const courseRef: DocumentReference<unknown> */
+          const courseREF = this.db.doc(`courses/${courseId}`).ref;
+          /**10º Our Case we want to Delete the course, and pass here Course Reference */
+          batched.delete(courseREF);
+          /**11º Now we all have to do is a loop for all Lessson[] and delete like the Course[] */
+          for (let lesson of localLessons) {
+            /**12º We need to gran the Lessons Ref*/
+            const lessonREF = this.db.doc(`courses/${courseId}/lesson/${lesson.id}`).ref;
+            batched.delete(lessonREF);
+          }
+          /**Batched.commit(), will return a Promise we must convert it a Observable using From Rxjs */
+          return from(batched.commit());
+        }
+        )
+      );
+  }
+
   /*****Delete Top data Collection, without delete nested Collection data */
   deleteCourse(courseID: string) {
-    return from(this.db.doc(`courses/${courseID}`).delete()) ;
+    return from(this.db.doc(`courses/${courseID}`).delete());
   }
 
 
 
 
   /*****UPDATE*****/
-   /* Will are going to have a Partial<Course> and not a full Course, because we wont update de ID */
+  /* Will are going to have a Partial<Course> and not a full Course, because we wont update de ID */
   /**Note: The returno of Obervabble is only used to test if the Operation was SECCESSFUL of NOT */
   updataCourse(courseID: string, courseChanged: Partial<ICourse>): Observable<any> {
-   return from (this.db.doc(`courses/${courseID}`).update(courseChanged));
+    return from(this.db.doc(`courses/${courseID}`).update(courseChanged));
   }
 
 
-  
+
   /******SAVEALL****/
   /* Do the queries using the SPECIAL target (array contains), this type must put into que condition Query */
   loadCoursesByCategory(category: string): Observable<ICourse[]> {

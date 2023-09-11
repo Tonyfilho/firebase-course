@@ -59,10 +59,11 @@ export class CoursesCardListComponent implements OnInit {
     }
 
 
-    /**As We did like EditeCourse, emit a Event if the course was delete */
+    /**As We did like EditeCourse, emit a Event if the course was delete */   
     OnDeleteCourse(course: ICourse) {
         /**1º** call the service and pass courseID */
-        this.coursesService.deleteCourse(course.id)
+       // this.coursesService.deleteCourse(course.id)
+        this.coursesService.deleteCourseAndCollection(course.id)
         .pipe(
             /**3º** we are going to Use TAP() to pass the data was delete and emit a value like EditeCourse()
              * after Event Emitted we are going reflesh template
