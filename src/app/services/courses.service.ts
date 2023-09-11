@@ -12,7 +12,38 @@ import { ILesson } from '../model/lesson';
 })
 export class CoursesService {
 
+
+
   constructor(private db: AngularFirestore) { };
+
+
+
+
+  /*** Find By URL */
+  /**Will return only on data in database */
+  findCourseByUrl(courseURL: string): Observable<ICourse | null> {
+    /**1º Get all the collection and created a REF with where is property is same of courseURL */
+  return  this.db.collection("courses", ref => ref.where("url", "==", courseURL))
+      /**2º grab the get Observable, as usual to get current results */
+      .get()
+      .pipe(
+        /**3º We are going to get a list of query results, and use MAP() Rxjs, we agoing to MAP the Observable of the courses or Null*/
+        map(result => {
+          console.log("Results.doc :", result.docs);
+          /**4º We are still goibg to get here an Array back as a results, we need to convert it */
+          result.docs.map(dataResults => {console.log("list dataResults.data(): ",  dataResults.data() )});
+          const localCourses: ICourse[] = convertSnap<ICourse>(result);
+          /**5º If the courses results is 1 value,is right, or other hand we not find any results  or if find multiples results, then the results will be Null
+           * or ather hand our query is invalid. */
+         return  localCourses.length == 1 ? localCourses[0] : null;
+        })
+        /**6º Now we  need to configure this as RESOLVER in you routeModule */
+
+      );
+    
+  }
+
+
 
   /*****Delete All the colection */
   /******Undestand Firebase Transactional Batched Writes****  */

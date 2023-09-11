@@ -9,6 +9,7 @@ import {AngularFireAuthGuard, hasCustomClaim, redirectUnauthorizedTo} from '@ang
 import {CreateUserComponent} from './create-user/create-user.component';
 import { AboutSnapShotComponent } from './about-with-snapshot-changes/about-with-snapshot-changes.component';
 import { AboutWithValueChangesComponent } from './about-with-value-changes/about-with-value-changes.component';
+import { CourseResolver } from './services/couser-resolver.service';
 
 const routes: Routes = [
   {
@@ -42,8 +43,15 @@ const routes: Routes = [
     component: LoginComponent
   },
   {
+    /**This is mean that whenever there is a routing transition, we need to find a COURSE in order to make a It 
+     * available heree to target component and process of Fetching
+     * that COURSE from somewhere
+     */
     path: 'courses/:courseUrl',
-    component: CourseComponent
+    component: CourseComponent,
+    resolve: {
+      course: CourseResolver
+    }
   },
   {
     path: '**',

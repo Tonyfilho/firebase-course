@@ -16,13 +16,15 @@ export class CourseComponent implements OnInit {
   loading = false;
 
   displayedColumns = ['seqNo', 'description', 'duration'];
-
+  course!: ICourse;
+  
   constructor(private route: ActivatedRoute) {
-
   }
-
+  
   ngOnInit() {
-
+    /**Get the value via RESOLVER SERVICES */
+    this.course = this.route.snapshot.data["course"];
+    
   }
 
 }
