@@ -1,0 +1,30 @@
+
+<div class="courses-panel">
+
+    <div class="header">
+
+        <h2 class="title">All Courses</h2>
+
+        <button mat-mini-fab color="accent" routerLink="/create-course">
+            <mat-icon class="add-course-btn">add</mat-icon>
+        </button>
+
+    </div>
+
+    <mat-tab-group>
+
+        <mat-tab label="Beginners" >
+            <!-- Update the courser By @OutPut() courseEdited and @ courseDeleted from  CourseCardListComponent, will reLoad the page -->
+            <courses-card-list [courses]="this.beginnersCourses$ | async" (courseEdited)="reloadCourses()" (courseDeleted)="reloadCourses()"></courses-card-list>
+        </mat-tab>
+        
+        <mat-tab label="Advanced">
+            <!-- Update the courser By @OutPut() courseEdited and @ courseDeleted from  CourseCardListComponent, will reLoad the page -->
+            <courses-card-list [courses]="this.advancedCourses$ | async" (courseEdited)="reloadCourses()" (courseDeleted)="reloadCourses()"></courses-card-list>
+
+        </mat-tab>
+
+    </mat-tab-group>
+
+</div>
+
