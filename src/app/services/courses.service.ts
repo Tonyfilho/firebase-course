@@ -33,20 +33,22 @@ export class CoursesService {
   findLessons(courseID: string, sortOrder: OrderByDirection = 'asc', pageNumber = 0, pageSize = 3): Observable<ILesson[]> {
     /**1º Path list of Lessons */
     /**2º Ref ordeBy the ASC */
-  return  this.db.collection(`courses/${courseID}/lessons`,
-    /**3º Limit of the data per page */ 
-    ref => ref.orderBy("segNo", sortOrder).limit(pageSize)
-    /**4º Pagenator quantity*/
-    .startAfter(pageNumber * pageSize)    
+    return this.db.collection(`courses/${courseID}/lessons`,    
+      /**3º Limit of the data per page */
+      ref => ref.orderBy("seqNo", sortOrder).limit(pageSize)
+        /**4º Pagenator quantity*/
+        .startAfter(pageNumber * pageSize)
     )
-    /**5º Grab the Get will return a Observable */
-    .get()
-    /**6º We are going to get a list of query results, and use MAP() Rxjs, we are going to MAP the Observable of the courses or Null*/
-    .pipe(
-      map(result => convertSnap(result))
-    );
+      /**5º Grab the Get will return a Observable */
+      .get()
+      /**6º We are going to get a list of query results, and use MAP() Rxjs, we are going to MAP the Observable of the courses or Null*/
+      .pipe(
+        map(results => {
+           //console.log("service Lessons", results.docs.map(d => d.data()));
+           return convertSnap<ILesson>(results) })
+      );
 
-    
+
 
   }
 
@@ -65,9 +67,9 @@ export class CoursesService {
       .pipe(
         /**3º We are going to get a list of query results, and use MAP() Rxjs, we are going to MAP the Observable of the courses or Null*/
         map(result => {
-          console.log("Results.doc :", result.docs);
+        //  console.log("Results.doc :", result.docs);
           /**4º We are still going to get here an Array back as a results, we need to convert it */
-          result.docs.map(dataResults => { console.log("list dataResults.data(): ", dataResults.data()) });
+          // result.docs.map(dataResults => { console.log("list dataResults.data(): ", dataResults.data()) });
           const localCourses: ICourse[] = convertSnap<ICourse>(result);
           /**5º If the courses results is 1 value,is right, or other hand we not find any results  or if find multiples results, then the results will be Null
            * or ather hand our query is invalid. */

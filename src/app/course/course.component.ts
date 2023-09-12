@@ -33,7 +33,7 @@ export class CourseComponent implements OnInit, OnDestroy {
         finalize(() => this.loading = false)
       )
       .subscribe({
-        next: (data: ILesson[]) => this.lessons = data,
+        next: (data: ILesson[]) => {this.lessons = data, console.log("1* page lesson: ", data)},
         error: err => { },
         complete: () => { }
       }
