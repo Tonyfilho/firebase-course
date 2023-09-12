@@ -41,7 +41,20 @@ export class CourseComponent implements OnInit, OnDestroy {
 
   }
   loadMore() {
-    /**Paginator */
+    /**Paginator increase here*/
+    this.lastPageLoaded++;
+    this.loading = true; /**activate spinner */
+    this.couserService.findLessons(this.course.id, "asc", this.lastPageLoaded)
+      .pipe(
+        /**Using Finalize, when the Observable is done or Sucess or Error, finalize will be call */
+        finalize(() => this.loading = false)
+      )
+      /**If you dont put subscribe nothing happening */
+
+      .subscribe(
+        /**Let`s grab here the lessons that we have received and let`s APPEND it to the lessons array */
+        /**Let`s remember this might include several pages of lessons and let`s CONCAT this a new page */
+        localLessons => this.lessons = this.lessons.concat(localLessons));
   }
 
   ngOnDestroy(): void {
