@@ -48,9 +48,11 @@ export class LoginComponent implements OnInit, OnDestroy {
             this.ui.start("#firebaseui-auth-container", uiConfig);
 
             /**15º just to try out our functionality, we are going to apply another option FirebaseUI library, this way will return the USERS and always have to sign in again */
-            this.ui.disableAutoSignIn();
+          //  this.ui.disableAutoSignIn();
 
         });
+
+        /**16º Let`s Implementing An Agular UserServices-API Design, Now our application knows if User is Log In or Not*/
 
 
     }
