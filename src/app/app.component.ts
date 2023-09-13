@@ -1,3 +1,4 @@
+import { UsersService } from './services/users.service';
 import {Component, OnInit} from '@angular/core';
 import {AngularFireAuth} from '@angular/fire/auth';
 import {from, Observable} from 'rxjs';
@@ -12,7 +13,7 @@ import {Router} from '@angular/router';
 })
 export class AppComponent implements OnInit {
 
-  constructor() {
+  constructor(private userService: UsersService) {
 
   }
 
