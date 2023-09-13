@@ -13,12 +13,17 @@ import {Router} from '@angular/router';
 })
 export class AppComponent implements OnInit {
 
-  constructor(private userService: UsersService) {
+  /**Change to Public to has access our template AppComponent:HTML */
+  constructor(public user: UsersService) {
 
   }
 
   ngOnInit() {
 
+  }
+
+  logOut() {
+    this.user.logOut();
   }
 
 }

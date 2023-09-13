@@ -5,7 +5,7 @@ import { catchError, map } from 'rxjs/operators';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
 import { CoursesService } from '../services/courses.service';
-import { CoursesClassFullService } from '../services/coursesClassFullDummy.service';
+import { CoursesClassFullService } from '../services/coursesClassFullExplanation.service';
 
 
 

@@ -1,8 +1,6 @@
 <mat-sidenav-container fullscreen>
-
   <mat-sidenav #start (click)="start.close()">
     <mat-nav-list>
-
       <a mat-list-item routerLink="/">
         <mat-icon>library_books</mat-icon>
         <span>Courses</span>
@@ -30,41 +28,38 @@
         <span>Register</span>
       </a>
 
-      <a mat-list-item routerLink="login">
+      <!-- Show the login link if the User is LoggedOut -->
+      <a
+        mat-list-item
+        routerLink="login"
+        *ngIf="this.user?.isLoggedOut$ | async"
+      >
         <mat-icon>account_circle</mat-icon>
         <span>Login</span>
       </a>
 
-      <a mat-list-item>
+      <!-- Show the login link if the User is LoggedIn -->
+      <a mat-list-item *ngIf="this.user.isLoggedIn$ | async" (click)="logOut()">
         <mat-icon>exit_to_app</mat-icon>
         <span>Logout</span>
       </a>
-
     </mat-nav-list>
-
   </mat-sidenav>
 
   <mat-toolbar color="primary">
-
     <div class="toolbar-tools">
-
       <button mat-icon-button (click)="start.open('mouse')">
         <mat-icon>menu</mat-icon>
       </button>
 
       <div class="filler"></div>
 
-      <ng-container>
-
-        <img class="user-avatar">
-
+      <!-- Add img id the User is LoggedIn , this is wrap in ngContainer-->
+      <ng-container *ngIf="this.user.pictureUrl$ | async" as pictureURL>
+        <img class="user-avatar" [src]="pictureURL" />
       </ng-container>
-
     </div>
-
-
   </mat-toolbar>
 
   <router-outlet></router-outlet>
-
 </mat-sidenav-container>
