@@ -55,7 +55,7 @@
       <div class="filler"></div>
 
       <!-- Add img id the User is LoggedIn , this is wrap in ngContainer-->
-      <ng-container *ngIf="this.user.pictureUrl$ | async" as pictureURL>
+      <ng-container *ngIf="this.user.pictureUrl$ | async" as pictureURL>        
         <img class="user-avatar" [src]="pictureURL" />
       </ng-container>
     </div>
