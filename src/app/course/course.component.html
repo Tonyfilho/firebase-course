@@ -7,8 +7,10 @@
   </div>
 
   <!-- We are going put property Bind to DataSource into the Mat-table -->
-  <mat-table class="lessons-table mat-elevation-z8" [dataSource]="lessons">
-
+  <mat-table
+    class="lessons-table mat-elevation-z8"
+    [dataSource]="lessons"
+  >
     <ng-container matColumnDef="seqNo">
       <mat-header-cell *matHeaderCellDef>#</mat-header-cell>
 
@@ -36,7 +38,12 @@
     <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
   </mat-table>
 
-  <button class="bottom-toolbar" mat-raised-button color="primary" (click)="loadMore()">
+  <button
+    class="bottom-toolbar"
+    mat-raised-button
+    color="primary"
+    (click)="loadMore()"
+  >
     Load More
   </button>
 </div>

@@ -1,11 +1,24 @@
+//If we don`t target the ANY collection or Any Nested Collection with a rule, for Default this information will remain PRIVATE
 rules_version = '2';
 
 service cloud.firestore {
-  match /databases/{database}/documents/courses/{courseId} {
-    allow read: if true; //or allow read; is that the same Effect.
-    
-   
+  match /databases/{database}/documents { 
 
-   
+  match /courses/{courseId} {
+    allow read: if true; //or allow read; is that the same Effect. 
+  //Nested Collection short way using match
+    match /lessons/{lessonId} {
+      allow read; 
+
+    }
+
   }
+ 
+
 }
+
+
+
+
+
+}//end Rules

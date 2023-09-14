@@ -1,7 +1,7 @@
 
 
 
-import { Observable, from } from 'rxjs';
+import { Observable, from, pipe } from 'rxjs';
 import { Injectable } from '@angular/core';
 
 import { ICourse } from '../model/course';
@@ -37,7 +37,13 @@ export class CoursesService {
       .get()
       .pipe(
         map(results => {
-          return convertSnap<ILesson>(results)
+          if (!results.docs.map((a) => a.data())) {
+            console.log("dentro IF");
+            let localLesson: ILesson[];
+            localLesson.push({ id: null, description: 'no Data', duration: 'no Data', seqNo: null, courseId: null  })
+            return convertSnap<ILesson>(localLesson); 
+          }
+          return convertSnap<ILesson>(results )
         })
       );
   }
