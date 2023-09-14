@@ -37,10 +37,10 @@ export class CoursesService {
       .get()
       .pipe(
         map(results => {
-          if (!results.docs.map((a) => a.data())) {
+          if (results.docs.map((a) => a.data()).length < 0) {
             console.log("dentro IF");
-            let localLesson: ILesson[];
-            localLesson.push({ id: null, description: 'no Data', duration: 'no Data', seqNo: null, courseId: null  })
+            let localLesson: ILesson;
+            localLesson = { id: null, description: 'no Data', duration: 'no Data', seqNo: null, courseId: null  };
             return convertSnap<ILesson>(localLesson); 
           }
           return convertSnap<ILesson>(results )
