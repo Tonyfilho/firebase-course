@@ -1,37 +1,20 @@
-//If we don`t target the ANY collection or Any Nested Collection with a rule, for Default this information will remain PRIVATE
+
 rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents { 
 
-  match /courses/{courseId} {
-    allow read: if true; //or allow read; is that the same Effect. 
-  //  allow get: if true;
-   allow list: if true;
-
-
-    allow write: if false; // We denying write access here to the course. This is Generic, because it includes to CREATE a new Document, to modify an Exsting Document or Delete a Document.
-    allow create: if false;
-    allow update: if true;
-    allow delete: if false;
-
-  //Nested Collection short way using match
-    match /lessons/{lessonId} {
-      allow read; 
-
+    function isAuthenticated() {
+       return request.auth.uid != null;
     }
 
+    match /courses/{courseId} {
+      allow read: if  isAuthenticated();
+        match /lessons/{lessonId} {
+          allow read: if  isAuthenticated();    
+        }
+    }
   }
-
-     match /courses/{courseId} {
-     allow list: if false;
-      }
- 
-
-}
-
-
-
 
 
 }//end Rules
