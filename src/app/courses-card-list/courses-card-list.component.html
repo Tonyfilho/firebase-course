@@ -6,7 +6,7 @@
 
   </mat-card-header>
 
-  <img mat-card-image [src]="course.iconUrl">
+  <img mat-card-image [src]="course.iconUrl"  *ngIf="this.isAdmin$?.admin | async as admin">
 
   <mat-card-content>
     <p>{{course.longDescription}}</p>
@@ -21,11 +21,12 @@
     <ng-container>
       <ng-container>
         <button mat-button class="mat-raised-button mat-accent"
-                (click)="editCourse(course)">
+                (click)="editCourse(course)"  *ngIf="this.isAdmin$?.admin | async as admin">
           EDIT
         </button>
-        <button mat-mini-fab color="warn" (click)="OnDeleteCourse(course)">
+        <button mat-mini-fab color="warn" (click)="OnDeleteCourse(course)"  *ngIf="this.isAdmin$?.admin | async as admin">
           <mat-icon>delete</mat-icon>
+          <!-- {{ admin }} -->
         </button>
       </ng-container>
     </ng-container>

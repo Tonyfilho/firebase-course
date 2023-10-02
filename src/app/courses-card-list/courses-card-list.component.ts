@@ -4,8 +4,10 @@ import { ICourse } from "../model/course";
 import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
 import { EditCourseDialogComponent } from "../edit-course-dialog/edit-course-dialog.component";
 import { catchError, tap } from 'rxjs/operators';
-import { throwError } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { Router } from '@angular/router';
+import { UsersService } from '../services/users.service';
+import { IUserRoles } from '../model/user-roles';
 
 @Component({
     selector: 'courses-card-list',
@@ -23,14 +25,17 @@ export class CoursesCardListComponent implements OnInit {
     @Output()
     courseDeleted = new EventEmitter<ICourse>();
 
+    isAdmin$: Observable<IUserRoles>;
+
     constructor(
         private dialog: MatDialog,
         private router: Router,
-        private coursesService: CoursesService) {
+        private coursesService: CoursesService, 
+        private userService: UsersService) {
     }
 
     ngOnInit() {
-
+       this.isAdmin$ = this.userService.roles$;
     }
 
     editCourse(course: ICourse) {
