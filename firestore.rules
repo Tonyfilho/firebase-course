@@ -38,7 +38,15 @@ service cloud.firestore {
           allow delete: if isAdmin();   
         }
     }
+
+    match /{path=**}/lessons/{lessonId} {
+      allow read: if isKnownUser();
+    }
+   
   }
+
+
+
 
 
 }//end Rules

@@ -53,15 +53,15 @@ export class AboutComponent {
     }
 
 
-    /**Collection Method is Method to get one Colletion is Obervable just emit ONLY ONE VALUE */
+    /**Collection Method is Method to get one Colletion is Obervable just emit ONLY ONE VALUE  ReadCollections()*/
     ReadCollections() {
         this.db.collection('courses').get().subscribe(snap => {
-            //  console.log("snap.query: ", snap.query);
-            //  console.log("snap.docs: ", snap.docs); //List of DOCS
+           console.log("snap.query: ", snap.query);
+           console.log("snap.docs: ", snap.docs); //List of DOCS
 
             snap.forEach(snap => {
-                //  console.log("FOREACH => snap.id: ", snap.id);
-                // console.log("FOREACH => snap.data(): ", snap.data());
+                console.log("FOREACH => snap.id: ", snap.id);
+                console.log("FOREACH => snap.data(): ", snap.data());
             }); //List of DOCS
 
         })
@@ -126,8 +126,8 @@ export class AboutComponent {
     ReadCollectionsGroup() {
 
         this.db.collectionGroup("lessons", ref => ref.where("seqNo", "==", 1))
-            .get().subscribe(snap => {
-                snap.forEach(snap => {
+            .get().subscribe(snaps => {
+                snaps.forEach(snap => {
                     console.log("QUERY GROUP: ", snap.id);
                     console.log("QUERY GROUP: ", snap.data());
                 }); //List of DOCS
