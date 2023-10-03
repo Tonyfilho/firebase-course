@@ -1,0 +1,1 @@
+https://github.com/angular/angularfire/blob/master/docs/compat/auth/router-guards.md
