@@ -6,6 +6,8 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
 import { CoursesService } from '../services/courses.service';
 import { CoursesClassFullService } from '../services/coursesClassFullExplanation.service';
+import { UsersService } from '../services/users.service';
+import { IUserRoles } from '../model/user-roles';
 
 
 
@@ -21,8 +23,10 @@ export class HomeComponent implements OnInit {
 
   advancedCourses$: Observable<ICourse[]>;
 
+  roles$: Observable<IUserRoles>;
+
   constructor(
-    private router: Router, private courseService: CoursesService, private courseService2: CoursesClassFullService) {
+    private router: Router, private courseService: CoursesService, private courseService2: CoursesClassFullService, private userServices: UsersService) {
 
   }
 
@@ -31,6 +35,8 @@ export class HomeComponent implements OnInit {
     /**It was used | Async 
     this.beginnersCourses$.subscribe(data => { console.log("Beginners: ", data)})
    this.advancedCourses$.subscribe(data => { console.log("Advanced: ", data)})*/
+
+    this.roles$ = this.userServices.roles$;
   }
 
   /**Fetch Methods */
