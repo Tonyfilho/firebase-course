@@ -20,7 +20,7 @@ export class UsersService {
   constructor(private afAuth: AngularFireAuth, private router: Router) {   
     this.isLoggedIn$ = this.afAuth.authState.pipe(map(user => !!user));
     this.isLoggedOut$ = this.isLoggedIn$.pipe(map(loggeIn => !loggeIn));  
-    this.pictureUrl$ = this.afAuth.authState.pipe(map(userInfo => userInfo ? userInfo.photoURL : "./../images/no_avatar.png"));
+    this.pictureUrl$ = this.afAuth.authState.pipe(map(userInfo => userInfo ? userInfo.photoURL : "./../../../assets/imagens/logIn/no_avatar.png"));
     /**_Let`s consume this observables and show or hide certain elements of the user interface, let`s to AppComponent */   
    
     /**Ex: using Tap or Map C:\_Angular\firebase-course\images\no_avatar.png */
