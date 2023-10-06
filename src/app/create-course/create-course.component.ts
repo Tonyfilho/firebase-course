@@ -5,7 +5,7 @@ import { ICourse } from '../model/course';
 import { catchError, concatMap, last, map, take, tap, } from 'rxjs/operators';
 import { from, Observable, throwError, pipe } from 'rxjs';
 import { Router } from '@angular/router';
-import { AngularFireStorage } from '@angular/fire/storage';
+import { AngularFireStorage, AngularFireUploadTask } from '@angular/fire/storage';
 import firebase from 'firebase/app';
 import Timestamp = firebase.firestore.Timestamp;
 import { CoursesService } from '../services/courses.service';
@@ -16,9 +16,8 @@ import { CoursesService } from '../services/courses.service';
   styleUrls: ['create-course.component.css']
 })
 export class CreateCourseComponent implements OnInit {
-  /**Get Id from the Firestore, before the form is going to create */
-  /**We need to inject the AngularFirestore to do this. */
   courseId: string;
+
   form: FormGroup = this.fb.group({
     description: ['', Validators.required],
     categories: ["BEGINNER", Validators.required], //BEGINNER  is a start value of form field
@@ -27,7 +26,15 @@ export class CreateCourseComponent implements OnInit {
     promo: [false], //False is a start value of the field
     promoStartAt: [null]
   });
-  constructor(private fb: FormBuilder, private afs: AngularFirestore, private courseService: CoursesService, private router: Router) {
+  /**Get Id from the Firestore, before the form is going to create */
+  /**We need to inject the AngularFirestore to do this. */
+  constructor(private fb: FormBuilder,
+    private afs: AngularFirestore,
+    private courseService: CoursesService,
+    private router: Router,
+    private storage: AngularFireStorage
+
+  ) {
 
   }
   ngOnInit(): void {
@@ -60,6 +67,32 @@ export class CreateCourseComponent implements OnInit {
           return throwError(err);
         })
       ).subscribe();
+
+  }
+
+  uploadThumbnail(event) {
+    //  console.log("Our  Event: ", event);
+    const file: File = event.target.files[0];
+    // console.log("File Name: ", file.name);
+    /**1º We need to create a Path Course*/
+    /**2º We need to create Sub Folder with ID , SubFolder need to be UNIQUE per course*/
+    /**3º We are going to upload the file with original Name*/
+    /**4º We are going to storage with Upload() Method, */
+    const filePath = `courses/${this.courseId}/${file.name}`;
+    /**4Aº We are going to pass the Path and File and Object with any metadata under the form of Http Headers, the Headers are going to be served whenever we download the file in the future, */
+    /**In our case, because this. file is not going to change often we want to be Cached for a very long time */
+    /**This way we won`t have to download the file Each Time that we access the page that is showing ou data Thumbnail*/
+    /**The File is going to be Nicely Cached oh the User´s Browser*/
+    /**5º when  we call the upload file, this is not going to trigger the Upload immediately, we need to get back here is AngularFireUploadTask */
+    const task: AngularFireUploadTask = this.storage.upload(filePath, file, {
+      cacheControl: "max-age=2592000,public"
+    });
+    task.snapshotChanges().subscribe();
+
+
+
+
+
 
   }
 
