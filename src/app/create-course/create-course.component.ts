@@ -17,6 +17,7 @@ import { CoursesService } from '../services/courses.service';
 })
 export class CreateCourseComponent implements OnInit {
   courseId: string;
+  percentageChanges$!: Observable<number>;
 
   form: FormGroup = this.fb.group({
     description: ['', Validators.required],
@@ -87,6 +88,10 @@ export class CreateCourseComponent implements OnInit {
     const task: AngularFireUploadTask = this.storage.upload(filePath, file, {
       cacheControl: "max-age=2592000,public"
     });
+
+    /**Get the Obervable the number to Mat-Progress-Bar */
+    this.percentageChanges$ = task.percentageChanges();
+    
     task.snapshotChanges().subscribe();
 
 
