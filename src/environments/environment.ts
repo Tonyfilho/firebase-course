@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   /**Active Emulator */
-  useEmulators: false,
+  useEmulators: true,
   /**Real Cloud Database, but Emulator must have with Flag: FALSE */
   firebase: {
     apiKey: "AIzaSyAQGE4krCEpWrWTpxhDnE_L51D4XgmdRj8",
