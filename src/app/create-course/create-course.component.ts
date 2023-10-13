@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ErrorHandler, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { ICourse } from '../model/course';
@@ -10,14 +10,16 @@ import firebase from 'firebase/app';
 import Timestamp = firebase.firestore.Timestamp;
 import { CoursesService } from '../services/courses.service';
 
+
 @Component({
   selector: 'create-course',
   templateUrl: 'create-course.component.html',
   styleUrls: ['create-course.component.css']
 })
 export class CreateCourseComponent implements OnInit {
-  courseId: string;
+  courseId!: string;
   percentageChanges$!: Observable<number>;
+  iconUrl!: string;
 
   form: FormGroup = this.fb.group({
     description: ['', Validators.required],
@@ -91,8 +93,29 @@ export class CreateCourseComponent implements OnInit {
 
     /**Get the Obervable the number to Mat-Progress-Bar */
     this.percentageChanges$ = task.percentageChanges();
-    
-    task.snapshotChanges().subscribe();
+    /**We are going to create a Safe Download URL */
+    /**1º We need to take a Snapshot Change Observable e WAIT the Upload before creating a safe Download URL */
+    task.snapshotChanges().pipe(
+      /**2º we are using the LAST(). The Last Operator is going to Take the Source Observable and it`s going to WAIT for it to complete before emitting by SUBSCRIBE
+       * Any value emitted here are going to accur ONLY when the FILE has been FULLY Uploaded.*/
+      /** With the LAST() we going to Emitt One Value*/
+      last(),
+      /**3º After the File got fully Uploaded, We want to do is to turn that Event and make another Request in Firebase Storage  to create a Safe Download URL*/
+      /** We going to use ConcatMap in order to take this event and convert it into Another Request to Firebase Storage */
+
+      concatMap(() => { 
+        /**4º We going to access Firebase Storage and pass the Path and get a REFERENCE to UpLoaded File and CREATE a URL */
+        return this.storage.ref(filePath).getDownloadURL() }),
+        /**5º After create a URL with are going to save our component*/
+      tap(url => this.iconUrl = url ),
+      /** 6º We going create here ErroHandling Logic in case the Error in this Operation Using the CatchError */
+      catchError(err => {
+        /**If the Error Occur, we are going to create a console and create a Alert from Js */
+        console.error(err);
+        alert("Ops Something Wrong with upload: Could not create thumbnail and URL ");
+        /** 7º Return Here a replace Observable ThrowError*/
+        return throwError(err);
+      })).subscribe();
 
 
 
